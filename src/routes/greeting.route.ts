@@ -1,14 +1,29 @@
 import { Router, Request, Response } from "express";
 
-const router = Router();
+export class GreetingRoute {
+  public router: Router;
+  private static instance: GreetingRoute;
 
-router.get("/", (req: Request, res: Response) => {
-  res.send("Hello world");
-});
+  private constructor() {
+    this.router = Router();
+    this.setupRoutes();
+  }
 
-router.post("/", (req: Request, res: Response) => {
-  const name = req.body.name;
-  res.send(`Hello ${name}`);
-});
+  public static getInstance(): GreetingRoute {
+    if (!GreetingRoute.instance) {
+      GreetingRoute.instance = new GreetingRoute();
+    }
+    return GreetingRoute.instance;
+  }
 
-export default router;
+  private setupRoutes() {
+    this.router.get("/", (req: Request, res: Response) => {
+      res.send("Hello world");
+    });
+
+    this.router.post("/", (req: Request, res: Response) => {
+      const name = req.body.name;
+      res.send(`Hello ${name}`);
+    });
+  }
+}
